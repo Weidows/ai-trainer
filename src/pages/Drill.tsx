@@ -18,14 +18,8 @@ export default function Drill() {
   const [tab, setTab] = useState<'theory' | 'practical'>('theory')
   return (
     <div className="enter space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="mb-1 text-[11px] font-semibold tracking-[0.14em] text-ink3 uppercase">Drill</div>
-          <h1 className="text-[24px] font-semibold tracking-tight">刷题</h1>
-          <p className="mt-1 text-[13px] text-ink2">
-            理论 {THEORY.length} 道（官方复习题）+ 实操 {TASKS.length} 道（官方题库全部题目）。
-          </p>
-        </div>
+      <h1 className="sr-only">刷题</h1>
+      <div className="flex flex-wrap items-center gap-3">
         <div className="flex rounded-lg border border-line bg-panel p-0.5">
           {(
             [

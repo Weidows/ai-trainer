@@ -56,14 +56,7 @@ export default function Mock() {
 
   return (
     <div className="enter space-y-6">
-      <header>
-        <div className="mb-1 text-[11px] font-semibold tracking-[0.14em] text-ink3 uppercase">Mock exam</div>
-        <h1 className="text-[24px] font-semibold tracking-tight">模拟考</h1>
-        <p className="mt-1 max-w-[64ch] text-[13px] leading-relaxed text-ink2">
-          按官方卷面结构随机组卷：理论 40 判断 + 140 单选 + 10 多选，90 分钟；实操按规则抽 6 题，120 分钟。
-          全程本地运行，不需要装 Python。
-        </p>
-      </header>
+      <h1 className="sr-only">模拟考</h1>
 
       <div className="grid gap-3 lg:grid-cols-2">
         <Card className="p-5">

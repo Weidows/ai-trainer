@@ -35,14 +35,7 @@ export default function CheatPage() {
 
   return (
     <div className="enter space-y-10">
-      <header>
-        <div className="mb-1 text-[11px] font-semibold tracking-[0.14em] text-ink3 uppercase">Cheat sheet</div>
-        <h1 className="text-[24px] font-semibold tracking-tight">速查</h1>
-        <p className="mt-1 max-w-[64ch] text-[13px] leading-relaxed text-ink2">
-          考前一天只看这一页：{C.memoCount} 条代码速记、{C.pitfalls.length} 个高频易错点，
-          以及本地题库的真实答案分布（拿来估猜的正确率）。
-        </p>
-      </header>
+      <h1 className="sr-only">速查</h1>
 
       {/* 高频易错 */}
       <section>
