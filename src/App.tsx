@@ -61,6 +61,23 @@ const NAV: { key: Route; label: string; hint: string; icon: ReactElement }[] = [
   },
 ]
 
+function Credit() {
+  const link = 'underline decoration-line2 underline-offset-2 hover:text-ink'
+  return (
+    <>
+      题目与素材来自上海交通大学终身教育学院《人工智能训练师（三级）》指导手册、
+      <a className={link} href="https://gjzs.sjtu.edu.cn/skill" target="_blank" rel="noreferrer">
+        gjzs.sjtu.edu.cn
+      </a>
+      ，解析与图文教程整理自
+      <a className={link} href="https://ai-trainer.nccloudservice.com/" target="_blank" rel="noreferrer">
+        ai-trainer.nccloudservice.com
+      </a>
+      。仅供个人备考。
+    </>
+  )
+}
+
 function routeFromHash(): Route {
   const h = location.hash.replace(/^#\/?/, '')
   return (['overview', 'drill', 'cheat', 'mock'] as Route[]).includes(h as Route) ? (h as Route) : 'overview'
@@ -93,7 +110,7 @@ export default function App() {
     <div className="min-h-screen bg-paper text-ink">
       <div className="mx-auto flex max-w-[1500px] flex-col lg:flex-row">
         {/* 侧边栏 */}
-        <aside className="sticky top-0 z-30 shrink-0 border-b border-line bg-paper/95 backdrop-blur lg:h-screen lg:w-[236px] lg:border-r lg:border-b-0">
+        <aside className="sticky top-0 z-30 shrink-0 border-b border-line bg-paper/95 backdrop-blur lg:flex lg:h-screen lg:w-[236px] lg:flex-col lg:border-r lg:border-b-0">
           <div className="flex items-center justify-between px-4 py-3.5 lg:block lg:px-5 lg:py-6">
             <button onClick={() => go('overview')} className="focus-ring flex items-center gap-2.5 text-left">
               <span className="grid h-9 w-9 place-items-center rounded-lg bg-ink text-[13px] font-bold text-paper">
@@ -158,7 +175,7 @@ export default function App() {
             })}
           </nav>
 
-          <div className="hidden px-4 py-6 lg:block">
+          <div className="hidden px-4 pt-6 pb-6 lg:mt-auto lg:block">
             <div className="rounded-lg border border-line bg-panel2 p-3">
               <div className="flex items-baseline justify-between text-[11.5px] text-ink3">
                 <span>理论进度</span>
@@ -200,8 +217,9 @@ export default function App() {
             </div>
             <div className="mt-4 text-[10.5px] leading-relaxed text-ink3">
               题库 {THEORY.length} 题 · 实操 {TASKS.length} 题
-              <br />
-              资料：上海交大 gjzs.sjtu.edu.cn
+            </div>
+            <div className="mt-3 border-t border-line pt-3 text-[10.5px] leading-[1.7] text-ink3">
+              <Credit />
             </div>
           </div>
         </aside>
@@ -212,16 +230,9 @@ export default function App() {
           {route === 'drill' && <Drill />}
           {route === 'cheat' && <Cheat />}
           {route === 'mock' && <Mock />}
-          <footer className="mt-14 border-t border-line pt-4 text-[11.5px] leading-relaxed text-ink3">
-            题目与素材来自上海交通大学终身教育学院《人工智能训练师（三级）》指导手册、
-            <a className="underline decoration-line2 underline-offset-2 hover:text-ink" href="https://gjzs.sjtu.edu.cn/skill" target="_blank" rel="noreferrer">
-              gjzs.sjtu.edu.cn
-            </a>
-            ，解析与图文教程整理自
-            <a className="underline decoration-line2 underline-offset-2 hover:text-ink" href="https://ai-trainer.nccloudservice.com/" target="_blank" rel="noreferrer">
-              ai-trainer.nccloudservice.com
-            </a>
-            。仅供个人备考。
+          {/* 移动端没有侧栏，出处声明留在页面底部 */}
+          <footer className="mt-12 border-t border-line pt-4 text-[11px] leading-relaxed text-ink3 lg:hidden">
+            <Credit />
           </footer>
         </main>
       </div>
