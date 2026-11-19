@@ -5,7 +5,7 @@ import type { Kind, Question, Task } from '../types'
 import { Badge, Bar, Card, Empty, SectionTitle } from '../components/ui'
 import QuestionCard from '../components/QuestionCard'
 import TaskDetail from '../components/TaskDetail'
-import { cn, isRight, pct } from '../lib/utils'
+import { cn, isRight, pct, shuffleWithSeed } from '../lib/utils'
 import { useMarks, useTaskAnswers } from '../lib/store'
 
 const THEORY = theory as Question[]
@@ -59,6 +59,8 @@ function TheoryDrill() {
   const [filter, setFilter] = useState<Filter>('all')
   const [chapter, setChapter] = useState('all')
   const [scope, setScope] = useState<'all' | 'wrong' | 'todo'>('all')
+  const [mix, setMix] = useState(false)
+  const [seed, setSeed] = useState(() => Date.now())
   const [idx, setIdx] = useState(0)
 
   const chapters = useMemo(() => {
@@ -77,12 +79,12 @@ function TheoryDrill() {
     if (chapter !== 'all') arr = arr.filter(q => q.chapter === chapter)
     if (scope === 'wrong') arr = arr.filter(q => marks[q.id]?.r === 'wrong')
     if (scope === 'todo') arr = arr.filter(q => !marks[q.id])
-    return arr
-  }, [filter, chapter, scope, marks])
+    return mix ? shuffleWithSeed(arr, seed) : arr
+  }, [filter, chapter, scope, marks, mix, seed])
 
   useEffect(() => {
     setIdx(0)
-  }, [filter, chapter, scope])
+  }, [filter, chapter, scope, mix, seed])
 
   const q = list[Math.min(idx, list.length - 1)]
   const mark = q ? marks[q.id] : undefined
@@ -144,6 +146,34 @@ function TheoryDrill() {
                 {label}
               </button>
             ))}
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setMix(v => !v)}
+              aria-pressed={mix}
+              title="打散题目顺序，跨题型、跨单元随机排列"
+              className={cn(
+                'focus-ring flex min-h-[34px] items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] transition sm:min-h-0',
+                mix
+                  ? 'border-accent/40 bg-accentsoft font-medium text-accent'
+                  : 'border-line text-ink3 hover:text-ink2',
+              )}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
+              </svg>
+              混排
+            </button>
+            {mix && (
+              <button
+                onClick={() => setSeed(Date.now())}
+                title="重新洗一副"
+                className="focus-ring min-h-[34px] rounded-md border border-line px-2 py-1 text-[11.5px] text-ink3 hover:text-ink sm:min-h-0"
+              >
+                ↻ 重洗
+              </button>
+            )}
           </div>
 
           <div className="ml-auto flex items-center gap-3 text-[11.5px] text-ink3">
@@ -215,6 +245,8 @@ function PracticalDrill() {
   const { answers } = useTaskAnswers()
   const [openId, setOpenId] = useState<string | null>(null)
   const [unit, setUnit] = useState<string>('all')
+  const [mix, setMix] = useState(false)
+  const [seed, setSeed] = useState(() => Date.now())
 
   const units = useMemo(() => {
     const seen: string[] = []
@@ -222,7 +254,10 @@ function PracticalDrill() {
     return seen
   }, [])
 
-  const list = unit === 'all' ? TASKS : TASKS.filter(t => t.unit === unit)
+  const list = useMemo(() => {
+    const arr = unit === 'all' ? TASKS : TASKS.filter(t => t.unit === unit)
+    return mix ? shuffleWithSeed(arr, seed) : arr
+  }, [unit, mix, seed])
   const task = TASKS.find(t => t.id === openId)
 
   if (task) {
@@ -263,6 +298,29 @@ function PracticalDrill() {
             {u}
           </button>
         ))}
+
+        <button
+          onClick={() => setMix(v => !v)}
+          aria-pressed={mix}
+          title="打散题目顺序"
+          className={cn(
+            'focus-ring ml-auto flex min-h-[34px] items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] transition sm:min-h-0',
+            mix ? 'border-accent/40 bg-accentsoft font-medium text-accent' : 'border-line text-ink3 hover:text-ink2',
+          )}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
+          </svg>
+          混排
+        </button>
+        {mix && (
+          <button
+            onClick={() => setSeed(Date.now())}
+            className="focus-ring min-h-[34px] rounded-md border border-line px-2 py-1 text-[11.5px] text-ink3 hover:text-ink sm:min-h-0"
+          >
+            ↻ 重洗
+          </button>
+        )}
       </div>
 
       <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">

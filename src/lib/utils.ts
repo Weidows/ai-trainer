@@ -168,3 +168,18 @@ export function shuffle<T>(arr: T[]) {
   }
   return a
 }
+
+/** 可复现的洗牌：同一个 seed 得到同一个顺序，翻页/重渲染不会跳题 */
+export function shuffleWithSeed<T>(arr: T[], seed: number): T[] {
+  const a = arr.slice()
+  let s = (seed >>> 0) || 1
+  const rnd = () => {
+    s = (Math.imul(s, 1664525) + 1013904223) >>> 0
+    return s / 4294967296
+  }
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
