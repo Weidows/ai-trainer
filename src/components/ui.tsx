@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react'
 import { cn, copyText } from '../lib/utils'
 
 export function Badge({
@@ -34,13 +34,16 @@ export function Card({
   children,
   className,
   as: As = 'div',
+  ...rest
 }: {
   children: ReactNode
   className?: string
   as?: 'div' | 'section' | 'article'
-}) {
+} & HTMLAttributes<HTMLElement>) {
   return (
-    <As className={cn('rounded-xl border border-line bg-panel', className)}>{children}</As>
+    <As className={cn('rounded-xl border border-line bg-panel', className)} {...rest}>
+      {children}
+    </As>
   )
 }
 

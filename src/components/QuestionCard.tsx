@@ -61,7 +61,7 @@ export default function QuestionCard({ q, picked, revealed, onAnswer, onNext, ne
   })
 
   return (
-    <Card className={cn('overflow-hidden', compact && 'rounded-lg')}>
+    <Card className={cn('overflow-hidden', compact && 'rounded-lg')} data-qid={q.id}>
       <div className="flex items-center gap-2 border-b border-line bg-panel2 px-4 py-2.5">
         <Badge tone={q.kind === 'judge' ? 'accent' : q.kind === 'single' ? 'brand' : 'ok'}>{q.kindName}</Badge>
         <span className="tabular text-[12px] text-ink3">{label ?? `第 ${q.no} 题`}</span>
