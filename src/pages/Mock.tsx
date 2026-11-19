@@ -309,6 +309,7 @@ function TheoryExam({ onSubmit, onQuit }: { onSubmit: (r: MockResult) => void; o
             revealed={false}
             onAnswer={setPicked}
             onNext={() => setCur(c => Math.min(items.length - 1, c + 1))}
+            onPrev={() => setCur(c => Math.max(0, c - 1))}
             nextLabel="下一题"
             label={`第 ${cur + 1} 题 · 共 ${items.length}`}
           />

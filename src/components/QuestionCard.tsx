@@ -9,12 +9,23 @@ type Props = {
   revealed?: boolean
   onAnswer: (picked: string) => void
   onNext?: () => void
+  onPrev?: () => void
   nextLabel?: string
   compact?: boolean
   label?: string
 }
 
-export default function QuestionCard({ q, picked, revealed, onAnswer, onNext, nextLabel = '下一题', compact, label }: Props) {
+export default function QuestionCard({
+  q,
+  picked,
+  revealed,
+  onAnswer,
+  onNext,
+  onPrev,
+  nextLabel = '下一题',
+  compact,
+  label,
+}: Props) {
   const [sel, setSel] = useState<string[]>(picked ? picked.split('') : [])
   const answered = revealed ?? (picked !== undefined && picked !== '')
 
@@ -24,7 +35,11 @@ export default function QuestionCard({ q, picked, revealed, onAnswer, onNext, ne
 
   const isMulti = q.kind === 'multi'
   const correct = answered && picked ? isRight(q, picked) : false
-  const keys = useMemo(() => q.options.map(o => o.k), [q.options])
+  // 判断题没有选项数组，用 1 / 2 映射到 √ / ×
+  const keys = useMemo(
+    () => (q.kind === 'judge' ? ['√', '×'] : q.options.map(o => o.k)),
+    [q.kind, q.options],
+  )
 
   const choose = (k: string) => {
     if (answered) return
@@ -42,12 +57,30 @@ export default function QuestionCard({ q, picked, revealed, onAnswer, onNext, ne
     onAnswer(sel.sort().join(''))
   }
 
-  // 键盘：1-5 选，回车提交/下一题
+  // 键盘：← / → 翻题，1-5 选选项，回车提交多选或进下一题
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA') return
+      const el = e.target as HTMLElement | null
+      if (el?.tagName === 'INPUT' || el?.tagName === 'TEXTAREA' || el?.isContentEditable) return
+      if (e.metaKey || e.ctrlKey || e.altKey) return
+
+      if (e.key === 'ArrowRight') {
+        if (onNext) {
+          e.preventDefault()
+          onNext()
+        }
+        return
+      }
+      if (e.key === 'ArrowLeft') {
+        if (onPrev) {
+          e.preventDefault()
+          onPrev()
+        }
+        return
+      }
+
       const n = Number(e.key)
-      if (n >= 1 && n <= keys.length) {
+      if (Number.isInteger(n) && n >= 1 && n <= keys.length) {
         e.preventDefault()
         choose(keys[n - 1])
       } else if (e.key === 'Enter') {

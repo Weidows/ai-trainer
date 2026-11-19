@@ -200,6 +200,7 @@ function TheoryDrill() {
             revealed={Boolean(mark)}
             onAnswer={picked => record(q.id, isRight(q, picked), picked)}
             onNext={next}
+            onPrev={prev}
           />
 
           <div className="flex items-center justify-between gap-2">
@@ -231,7 +232,7 @@ function TheoryDrill() {
           </div>
 
           <p className="text-center text-[11px] text-ink3">
-            快捷键：1–5 选选项 · Enter 提交或进下一题
+            快捷键：← → 翻题 · 1–5 选选项 · Enter 提交多选或进下一题
           </p>
         </>
       )}
