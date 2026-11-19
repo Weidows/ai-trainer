@@ -1,0 +1,21 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+.DS_Store
+Thumbs.db
+
+# python
+__pycache__/
+*.pyc
+
+# 抓取的原始页面（体积大，用 npm run fetch 重新拉）
+scripts/source/pages/
+
+# 编辑器
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# ts build info
+*.tsbuildinfo

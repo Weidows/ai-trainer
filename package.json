@@ -1,0 +1,28 @@
+{
+  "name": "ai-trainer",
+  "private": true,
+  "version": "1.0.0",
+  "description": "上海交大 人工智能训练师（三级）备考工作台：考纲概览 / 900 题刷题 / 40 道实操 / 速查 / 模拟考",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "serve": "vite preview --port 4173",
+    "data": "python scripts/build_theory.py && python scripts/build_practical.py && python scripts/build_cheatsheet.py && python scripts/build_outline.py",
+    "fetch": "python scripts/fetch_pages.py"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}
